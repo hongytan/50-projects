@@ -1,31 +1,37 @@
-word = 'python'
-word = [*word]
+w = 'python'
+word = [*w]
 n = len(word)
-guess_word = ['_' for _ in range(n)]
 
-count = 0
+lives = 12
 
-print("Guess the characters")
-for _ in word:
+guessed_letters = set()
+guessed_word = ['_' for _ in range(n)]
+
+print('Guess the characters')
+for _ in range(n):
     print('_', end=' ')
 print()
 
-lives = 12
-while count != n and lives > 0:
+while lives > 0 and '_' in guessed_word:
+    # Guess a character that has not been guessed yet
+    guess = input('Guess a character: ')
+    while guess in guessed_letters:
+        guess = input('Guess a different character: ')
+    guessed_letters.add(guess)
 
-    guess = input("Guess a character: ")
-
+    # Check if character is word
     if guess in word:
-        i = word.index(guess)
-        guess_word[i] = guess
-        count += 1
+        indices = [i for i, x in enumerate(word) if x == guess]
+        for i in indices:
+            guessed_word[i] = guess
 
-    for letter in guess_word:
+    for letter in guessed_word:
         print(letter, end=' ')
     print()
 
-ans = ''.join(guess_word)
-if count == n:
-    print(f'You win! The word is {ans}.')
+    lives -= 1
+
+if lives == 0:
+    print(f'You lose. The word is {w}.')
 else:
-    print(f'You lose! The word is {ans}.')
+    print(f'You win! The word is {w}.')
