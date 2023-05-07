@@ -13,17 +13,17 @@ def merge(nums1, m, nums2, n) -> None: # O(m+n))
             k+=1 # O(1)
     
     if i >= m: # O(1)
-        A[k:] = nums2[j:] # O(n)
+        A[k:] = nums2[j:n] # O(n)
     else: # O(1)
-        A[k:] = nums1[i:] # O(m)
+        A[k:] = nums1[i:m] # O(m)
     
     nums1[:] = A[:] # O(m+n)
     print(nums1) # O(m+n)
 
 # ======================================================================
 
-nums1 = [1,2,3,0,0,0]
-m, n = 3, 3
-nums2 = [2,5,6]
+nums1 = [2,0]
+m, n = 1, 1
+nums2 = [1]
 
 merge(nums1, m, nums2, n)
