@@ -1,18 +1,24 @@
 import random
 
-# Player variable is a boolean: True (User), False (Computer)
-player = True
+player = 'user' # Player variable
+num = []        # List for numbers
 
-num = [] # List for numbers
+# Return True if there is a winner else False
+def winner(nums):
+    if 21 in nums:
+        return True
+    return False
 
 # Get valid inputs from player
 def get_inputs(player, nums):
 
-    if player: # User's turn
+    if player == 'user': # User's turn
         input_len = int(input('How many numbers do you wish to enter?\n> '))
-        print('Enter your values')
+        print('Enter your values (> 0)')
         for _ in range(input_len):
             x = int(input('> '))
+            while x < 1:
+                x = int(input('> '))
             nums.append(x)
 
     # Check if numbers given by user are not consecutive
@@ -28,15 +34,12 @@ def get_inputs(player, nums):
 
         print("Order of inputs after computer's turn is:")
         print(nums)
-        print()
-        print('Your turn.')
-        print()
 
     return nums
 
 # Let player choose to start first or second
 def start_first_or_second(player):
-    if player: # User
+    if player == 'user': # User
         start_place = input("Enter 'F' to start first.\nEnter 'S' to start second.\n> ") # Ask if user wants to start first or second
         while start_place != 'F' and start_place != 'S': # Ensure correctness of input
             start_place = input("Enter 'F' to start first.\nEnter 'S' to start second.\n> ")
@@ -44,6 +47,26 @@ def start_first_or_second(player):
         start_place = random.choice(['S','F'])
 
     return start_place
+
+def game(player, nums):
+
+    while 21 not in nums:
+
+        # Get inputs
+        nums = get_inputs(player, nums)
+        if not nums:
+            print('Numbers not consecutive! You lose.')
+            break
+
+        # Check for winner
+        if winner(nums):
+            print('Congrats! You win!')
+            break
+
+        # Next player
+        player = 'user' if player == 'computer' else 'computer'
+
+    return 
 
 # ===========================================================================================
 
@@ -54,28 +77,14 @@ while start_game != 'y' and start_game != 'n': # Ensure correctness of input
 
 if start_game == 'y': # User starts the game
 
-    start_place = start_first_or_second(True)
+    start_place = start_first_or_second('user')
 
     if start_place == 'F': # User starts first
-        num = get_inputs(player, num)
+        game(player, num)
     else: # Computer starts first
-        player = False
-        num = get_inputs(player, num)
+        player = 'computer'
+        game(player, num)
 
-    while 21 not in num:
-        player = False if player else True
-        num = get_inputs(player, num)
-        if not num: break
-    if player: print('You lose!')
-    else: print('CONGRATULATIONS!!!\nYOU WON!')
-
-    
 else: # Computer starts the game and computer always starts first by my design
-    player = False
-    num = get_inputs(player, num)
-    while 21 not in num:
-        player = False if player else True
-        num = get_inputs(player, num)
-        if not num: break
-    if player: print('You lose!')
-    else: print('CONGRATULATIONS!!!\nYOU WON!')
+    player = 'computer'
+    game(player, num)
